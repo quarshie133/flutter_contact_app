@@ -42,6 +42,14 @@ class _ContactListPageState extends State<ContactListPage> {
           return ListTile(
             title: Text(_contacts[index].name),
             subtitle: Text(_contacts[index].email),
+            trailing: IconButton(
+              icon: Icon(
+                _contacts[index].isFavorite ? Icons.star : Icons.star_border,
+                color: _contacts[index].isFavorite ? Colors.amber : Colors.grey,
+              ), onPressed: () { 
+                _contacts[index].isFavorite = !_contacts[index].isFavorite;
+               },
+            ),
           );
         },
       ),
