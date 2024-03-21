@@ -1,6 +1,9 @@
 import 'package:contact_app/data/contact.dart';
+import 'package:contact_app/ui/contact_list/widget/contact_tile.dart';
+import 'package:contact_app/ui/model/contacts_model.dart';
 import 'package:flutter/material.dart';
 import 'package:faker/faker.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class ContactListPage extends StatefulWidget {
   @override
@@ -8,25 +11,7 @@ class ContactListPage extends StatefulWidget {
 }
 
 class _ContactListPageState extends State<ContactListPage> {
-  late List<Contact> _contacts;
-
-// Runs when the widget initialized
-  @override
-  void initState() {
-    super.initState();
-
-    _contacts = List.generate(
-      50,
-      (index) {
-        return Contact(
-          name: faker.person.firstName() + ' ' + faker.person.lastName(),
-          email: faker.internet.freeEmail(),
-          phoneNumber: faker.randomGenerator.integer(1000000).toString(),
-        );
-      },
-    );
-  }
-
+// Build function runs when the state chnages
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,21 +20,16 @@ class _ContactListPageState extends State<ContactListPage> {
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
       ),
-      body: ListView.builder(
-        itemCount: _contacts.length,
-        // Runs and build every single list item
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(_contacts[index].name),
-            subtitle: Text(_contacts[index].email),
-            trailing: IconButton(
-              icon: Icon(
-                _contacts[index].isFavorite ? Icons.star : Icons.star_border,
-                color: _contacts[index].isFavorite ? Colors.amber : Colors.grey,
-              ), onPressed: () { 
-                _contacts[index].isFavorite = !_contacts[index].isFavorite;
-               },
-            ),
+      body: ScopedModelDescendant<ContactModel>(
+        builder: (context, child, model) {
+          return ListView.builder(
+            itemCount: model.contacts.length,
+            // Runs and build every single list item
+            itemBuilder: (context, index) {
+              return ContactTile(
+                contactIndex: index,
+              );
+            },
           );
         },
       ),
