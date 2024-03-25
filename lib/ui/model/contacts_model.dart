@@ -4,7 +4,7 @@ import 'package:scoped_model/scoped_model.dart';
 
 class ContactModel extends Model {
   late List<Contact> _contacts = List.generate(
-    50,
+    5,
     (index) {
       return Contact(
         name: faker.person.firstName() + ' ' + faker.person.lastName(),
@@ -15,6 +15,15 @@ class ContactModel extends Model {
   );
 // get only property, makes sure that we cannot overwrite contact from different classes
   List<Contact> get contacts => _contacts;
+
+  void addContact(Contact contact) {
+    print(_contacts.length);
+
+    _contacts.add(contact);
+    
+    print(_contacts.length);
+    notifyListeners();
+  }
 
   void changedFavoriteStatus(int index) {
     _contacts[index].isFavorite = !_contacts[index].isFavorite;
